@@ -6,6 +6,7 @@ import com.gavaskar.app.ws.ui.model.request.UserDetailsReqModel;
 import com.gavaskar.app.ws.ui.model.response.UserRest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,9 +17,15 @@ public class UserController {
     private UserService userService;
 
     // get user information
-    @GetMapping
-    public String getUser() {
-        return "get user was called";
+    @GetMapping(path="/{userId}")
+    public UserRest getUser(@PathVariable String userId) {
+        //provide userId
+        UserRest ret = new UserRest();
+
+        UserDto user = userService.getUserByUserId(userId);
+        BeanUtils.copyProperties(user, ret);
+
+        return ret;
     }
 
     // create user
