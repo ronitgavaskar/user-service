@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     // get user information
     @GetMapping
@@ -25,6 +25,7 @@ public class UserController {
     @PostMapping
     public UserRest createUser(@RequestBody UserDetailsReqModel userDetails) {
         UserRest ret = new UserRest();
+
 
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);
