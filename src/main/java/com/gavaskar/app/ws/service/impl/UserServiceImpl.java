@@ -7,10 +7,14 @@ import com.gavaskar.app.ws.shared.Utils;
 import com.gavaskar.app.ws.shared.dto.UserDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -48,7 +52,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+    public UserDto getUser(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) throw new UsernameNotFoundException("User not found");
+
+        UserDto returnVal = new UserDto();
+        BeanUtils.copyProperties(userEntity, returnVal);
+
+        return returnVal;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // username is email
+        UserEntity userEntity = userRepository.findByEmail(email);
+        if (userEntity == null) throw new RuntimeException("Username not found!");
+        else {
+            // User is from Spring framework and takes in email, password and a collection
+            // user is found
+            return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+        }
     }
 }
