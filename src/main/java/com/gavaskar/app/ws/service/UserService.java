@@ -13,4 +13,10 @@ public interface UserService extends UserDetailsService {
 
     //getUserByUserId which needs to accept a public userId and returns DTO for user found
     UserDto getUserByUserId(String userId);
+
+    //updateUser takes in userId which is how we will get back the user to update
+    UserDto updateUser(UserDto user, String userId);
+
+    //deleteUser takes in userId and deletes user from database
+    void deleteUser(String userId);
 }

@@ -1,5 +1,6 @@
 package com.gavaskar.app.ws.service.impl;
 
+import com.gavaskar.app.ws.exceptions.UserServiceException;
 import com.gavaskar.app.ws.io.repository.UserRepository;
 import com.gavaskar.app.ws.io.entity.UserEntity;
 import com.gavaskar.app.ws.service.UserService;
@@ -74,6 +75,36 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userEntity, returnVal);
 
         return returnVal;
+    }
+
+    @Override
+    public UserDto updateUser(UserDto user, String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        }
+
+        UserDto returnVal = new UserDto();
+
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
+
+        UserEntity updatedDetails = userRepository.save(userEntity);
+        BeanUtils.copyProperties(updatedDetails, returnVal);
+
+        return returnVal;
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new UserServiceException("Record with ID " + userId + " not found.");
+        }
+
+        userRepository.delete(userEntity);
     }
 
     @Override

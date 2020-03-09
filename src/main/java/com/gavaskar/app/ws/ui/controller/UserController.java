@@ -1,11 +1,11 @@
 package com.gavaskar.app.ws.ui.controller;
 
 import com.gavaskar.app.ws.exceptions.UserServiceException;
+import com.gavaskar.app.ws.io.entity.UserEntity;
 import com.gavaskar.app.ws.service.UserService;
 import com.gavaskar.app.ws.shared.dto.UserDto;
 import com.gavaskar.app.ws.ui.model.request.UserDetailsReqModel;
-import com.gavaskar.app.ws.ui.model.response.ErrorMessages;
-import com.gavaskar.app.ws.ui.model.response.UserRest;
+import com.gavaskar.app.ws.ui.model.response.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -57,15 +57,51 @@ public class UserController {
     }
 
     //update user information
-    @PutMapping
-    public String updateUser() {
-        return "update user was called";
+
+    /**
+     * First difference: we will be using HTTP PUT Request
+     * Provide ID of user to update
+     * JSON Body to update such as firstName, lastName
+     * Only if user has authenticated and if user has JWT value for application
+     *
+     */
+    @PutMapping(
+            path = "/{userId}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public UserRest updateUser(@RequestBody UserDetailsReqModel userDetails, @PathVariable String userId) {
+
+        UserRest ret = new UserRest();
+
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails, userDto);
+
+        UserDto user = userService.updateUser(userDto, userId);
+        BeanUtils.copyProperties(user, ret);
+
+        return ret;
     }
 
     // delete user
-    @DeleteMapping
-    public String deleteUser() {
-        return "delete user was called";
+
+    /**
+     * Get proper authorization
+     * UserId will be passed in as parameter to delete and identifier of which user
+     */
+
+    @DeleteMapping(
+            path = "/{userId}",
+            produces ={ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public OperationStatus deleteUser(@PathVariable String userId) {
+        OperationStatus ret = new OperationStatus();
+
+        ret.setOperationName(RequestOperationName.DELETE.getOperation());
+        userService.deleteUser(userId);
+
+        ret.setOperationResult(RequestOperationStatus.SUCCESS.getStatus());
+        return ret;
     }
 
 }
