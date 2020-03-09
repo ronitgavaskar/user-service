@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("users")  //http://localhost:8080/users
@@ -20,6 +21,26 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    // pagination is 0-indexed VERY IMPORTANT
+    @GetMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public ArrayList<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "limit", defaultValue = "25") int limit) {
+        ArrayList<UserRest> ret = new ArrayList<>();
+
+        ArrayList<UserDto> users = userService.getAllUsers(page, limit);
+
+        for (UserDto user: users) {
+            UserRest userModel = new UserRest();
+            BeanUtils.copyProperties(user, userModel);
+            ret.add(userModel);
+        }
+
+        return ret;
+
+    }
 
     // get user information
     @GetMapping(path="/{userId}",

@@ -3,6 +3,9 @@ package com.gavaskar.app.ws.service;
 import com.gavaskar.app.ws.shared.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface UserService extends UserDetailsService {
 
     // createUser which needs to accept UserDto user and return UserDto
@@ -19,4 +22,8 @@ public interface UserService extends UserDetailsService {
 
     //deleteUser takes in userId and deletes user from database
     void deleteUser(String userId);
+
+    //getAllUsers gets a list of users
+    ArrayList<UserDto> getAllUsers(int page, int limit);
+
 }

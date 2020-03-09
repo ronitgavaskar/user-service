@@ -8,6 +8,7 @@ public enum ErrorMessages {
     AUTHENTICATION_FAILED("Authentication failed"),
     COULD_NOT_UPDATE_RECORD("Could not update record"),
     COULD_NOT_DELETE_RECORD("Could not delete record"),
+    NO_USERS_FOUND("Could not find any users"),
     EMAIL_ADDRESS_NOT_VERIFIED("Email address could not be verified");
 
 
