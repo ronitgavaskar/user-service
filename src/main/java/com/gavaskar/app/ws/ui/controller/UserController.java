@@ -22,11 +22,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // pagination is 0-indexed VERY IMPORTANT
     @GetMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
-    public ArrayList<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
+    public ArrayList<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "limit", defaultValue = "25") int limit) {
         ArrayList<UserRest> ret = new ArrayList<>();
 

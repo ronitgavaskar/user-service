@@ -113,6 +113,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ArrayList<UserDto> getAllUsers(int page, int limit) {
+        if (page > 0) {
+            page -= 1;
+        }
+
         PageRequest pageableReq = PageRequest.of(page, limit);
 
         Page<UserEntity> allUsersPage = userRepository.findAll(pageableReq);
