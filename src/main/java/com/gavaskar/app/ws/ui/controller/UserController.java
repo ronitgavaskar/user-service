@@ -1,8 +1,10 @@
 package com.gavaskar.app.ws.ui.controller;
 
+import com.gavaskar.app.ws.exceptions.UserServiceException;
 import com.gavaskar.app.ws.service.UserService;
 import com.gavaskar.app.ws.shared.dto.UserDto;
 import com.gavaskar.app.ws.ui.model.request.UserDetailsReqModel;
+import com.gavaskar.app.ws.ui.model.response.ErrorMessages;
 import com.gavaskar.app.ws.ui.model.response.UserRest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +39,13 @@ public class UserController {
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces ={ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+
             )
-    public UserRest createUser(@RequestBody UserDetailsReqModel userDetails) {
+    public UserRest createUser(@RequestBody UserDetailsReqModel userDetails) throws Exception {
         UserRest ret = new UserRest();
 
+        if (userDetails.getFirstName().isEmpty())
+            throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);

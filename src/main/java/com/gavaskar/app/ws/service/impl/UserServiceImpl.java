@@ -5,6 +5,7 @@ import com.gavaskar.app.ws.io.entity.UserEntity;
 import com.gavaskar.app.ws.service.UserService;
 import com.gavaskar.app.ws.shared.Utils;
 import com.gavaskar.app.ws.shared.dto.UserDto;
+import com.gavaskar.app.ws.ui.model.response.ErrorMessages;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,11 +30,11 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public UserDto createUser(UserDto user) {
+    public UserDto createUser(UserDto user) throws Exception {
 
         UserEntity userExists = userRepository.findByEmail(user.getEmail());
         if(userExists != null) {
-            throw new RuntimeException("Record already exists!!");
+            throw new Exception(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
         }
 
         UserEntity userEntity = new UserEntity();
