@@ -1,6 +1,9 @@
 package com.gavaskar.app.ws.shared.dto;
 
+import com.gavaskar.app.ws.ui.model.request.AddressReqModel;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class UserDto implements Serializable {
     private static final long serialVersionUserId = 1L;
@@ -14,6 +17,7 @@ public class UserDto implements Serializable {
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
+    private List<AddressDTO> addresses;
 
     public String getId() {
         return id;
@@ -87,4 +91,11 @@ public class UserDto implements Serializable {
         this.emailVerificationStatus = emailVerificationStatus;
     }
 
+    public List<AddressDTO> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressDTO> addresses) {
+        this.addresses = addresses;
+    }
 }

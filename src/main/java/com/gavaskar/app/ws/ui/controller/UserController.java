@@ -6,10 +6,12 @@ import com.gavaskar.app.ws.service.UserService;
 import com.gavaskar.app.ws.shared.dto.UserDto;
 import com.gavaskar.app.ws.ui.model.request.UserDetailsReqModel;
 import com.gavaskar.app.ws.ui.model.response.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
@@ -67,8 +69,11 @@ public class UserController {
         if (userDetails.getFirstName().isEmpty())
             throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(userDetails, userDto);
+//        UserDto userDto = new UserDto();
+//        BeanUtils.copyProperties(userDetails, userDto);
+
+        ModelMapper mapper = new ModelMapper();
+        UserDto userDto = mapper.map(userDetails, UserDto.class);
 
         UserDto createdUser = userService.createUser(userDto);
         BeanUtils.copyProperties(createdUser, ret);

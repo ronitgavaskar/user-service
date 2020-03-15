@@ -1,11 +1,14 @@
 package com.gavaskar.app.ws.ui.model.request;
 
+import java.util.List;
+
 public class UserDetailsReqModel {
 
     private String firstName;
     private String lastName;
     private String email;
     private String password;
+    private List<AddressReqModel> addresses;
 
     public String getFirstName() {
         return firstName;
@@ -40,5 +43,11 @@ public class UserDetailsReqModel {
     }
 
 
+    public List<AddressReqModel> getAddresses() {
+        return addresses;
+    }
 
+    public void setAddresses(List<AddressReqModel> addresses) {
+        this.addresses = addresses;
+    }
 }
